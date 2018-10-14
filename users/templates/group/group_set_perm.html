@@ -1,0 +1,70 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>用户组权限选择</h5>
+                </div>
+                <div class="ibox-content">
+                    <form id="form" action="#" class="wizard-big">
+                        <select class="form-control dual_select" multiple id="perm_form">
+                            {% for perm_obj in perm_list %}
+                                <option value="{{ perm_obj.id }}"
+                                        {% if perm_obj in group_obj.permissions.all %}selected{% endif %}>{{ perm_obj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" onclick="history.back()">返回</button>
+                        <button type="button" class="btn btn-primary"
+                                onclick="submit_group_perm({{ group_obj.id }})">保存更改
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block load_js %}
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script>
+        $('.dual_select').bootstrapDualListbox({
+            selectorMinimalHeight: 160
+        });
+
+        function submit_group_perm(group_id) {
+            var data = {};
+            data['perm_list'] = $('#perm_form').val();
+            data['group_id'] = group_id;
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            $.post('{% url 'group_set_perm' %}', data, function (res) {
+                if (res.status == 0) {
+                    swal({
+                        title: res.msg,
+                        type: 'success',
+                        confirmButtonText: "OK"
+                    }, function () {
+                        window.location.href = '{% url 'group_list' %}';
+                    });
+                } else {
+                    swal({
+                        title: res.msg,
+                        type: 'error',
+                        confirmButtonText: "知道了"
+                    });
+                }
+            })
+        }
+    </script>
+
+{% endblock %}

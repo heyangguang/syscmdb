@@ -1,0 +1,236 @@
+{% extends 'public/layout.html' %}
+{% load group_tag %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="/static/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+    <style>
+        .float-e-margins .btn {
+            margin-bottom: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>资源管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>服务器列表</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>服务器列表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                    data-target="#myModal">
+                                添加服务器
+                            </button>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover  dataTable no-footer">
+                            <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">机房</th>
+                                <th class="text-center">业务线</th>
+                                <th class="text-center">产品线</th>
+                                <th class="text-center">主机名</th>
+                                <th class="text-center">管理IP</th>
+                                <th class="text-center">机器类型</th>
+                                <th class="text-center">探测状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for server_obj in object_list %}
+                                <tr>
+                                    <td class="text-center">{{ forloop.counter }}</td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center">{{ server_obj.username }}</td>
+                                    <td class="text-center">{{ server_obj.ip_inner }}</td>
+                                    <td class="text-center">{{ server_obj.server_auto.system_status }}</td>
+                                    <td class="text-center">{{ server_obj.scan_status }}</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-xs btn-info"
+                                           href="">更新</a>
+                                        <a class="btn btn-xs btn-danger" id="idc_delete"
+                                           onclick="idc_delete({{ idc_obj.id }})">删除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                        <div class="modal inmodal fade" id="myModal" tabindex="-1"
+                             role="dialog"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span
+                                                aria-hidden="true">&times;</span><span
+                                                class="sr-only">Close</span>
+                                        </button>
+                                        <h4 class="modal-title">添加服务器</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="create_host_form">
+                                        {% csrf_token %}
+                                            <div class="form-group">
+                                                <label class="col-md-12 control-label">主机IP</label>
+                                                <input type="text" class="form-control" placeholder="主机IP"
+                                                       name="ip_inner">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-12 control-label">主机端口</label>
+                                                <input type="text" class="form-control" placeholder="主机端口(基于SSH)"
+                                                       name="port">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-12 control-label">操作系统</label>
+                                                <select class="select2_demo_1 form-control" name="os_status">
+                                                    {% for os_tuple in os_list %}
+                                                        <option value="{{ os_tuple.0 }}">{{ os_tuple.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-12 control-label">机器类型</label>
+                                                <select class="select2_demo_1 form-control" name="system_status">
+                                                    {% for system_tuple in system_list %}
+                                                        <option value="{{ system_tuple.0 }}">{{ system_tuple.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary" data-style="expand-right"
+                                                id="submit_host">提交
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <center>
+                                <div class="btn-group">
+                                    <a class="btn btn-white" href="{% url 'idc_list' %}?page=1">首页</a>
+                                    {% if page_obj.has_previous %}
+                                        <a class="btn btn-white" type="button"
+                                           href="?page={{ page_obj.previous_page_number }}">
+                                            上一页
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-white" type="button" disabled="disabled">上一页</a>
+                                    {% endif %}
+
+                                    {% for page in page_range %}
+                                        {% ifequal page page_obj.number %}
+                                            <a class="btn btn-white active">{{ page }}</a>
+                                        {% else %}
+                                            <a href="?page={{ page }}" class="btn btn-white">{{ page }}</a>
+                                        {% endifequal %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                        <a class="btn btn-white" type="button"
+                                           href="?page={{ page_obj.next_page_number }}">
+                                            下一页
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-white" type="button" disabled>下一页</a>
+                                    {% endif %}
+                                    <a class="btn btn-white"
+                                       href="{% url 'idc_list' %}?page={{ paginator.num_pages }}">末页</a>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block load_js %}
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/static/js/plugins/ladda/spin.min.js"></script>
+    <script src="/static/js/plugins/ladda/ladda.min.js"></script>
+    <script src="/static/js/plugins/ladda/ladda.jquery.min.js"></script>
+    <script>
+        $('#submit_host').click(function () {
+            var btn = $(this).ladda();
+            btn.ladda('start');
+            var data = $('#create_host_form').serialize();
+            $.ajax({
+                url: '{% url 'server_create' %}',
+                type: 'post',
+                data: data,
+                success: function (res) {
+                    setTimeout(function () {
+                        btn.ladda('stop');
+                    }, 200);
+                    if (res.status == 0) {
+                        swal({
+                            title: res.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.href = '{% url 'server_list' %}';
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                }
+            })
+
+        })
+    </script>
+{% endblock %}

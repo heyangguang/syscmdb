@@ -1,0 +1,203 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/dualListbox/bootstrap-duallistbox.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>用户管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>创建用户组</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>创建用户组</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+
+                        <form method="post" class="form-horizontal" action="{% url 'group_create' %}"
+                              enctype="multipart/form-data" id="create_form">
+                            {% csrf_token %}
+                            <h3>账户</h3>
+                            <div class="form-group"><label class="col-md-2 control-label">名称</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="名称" name="name">
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">用户</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="请选择用户" class="chosen-select" multiple
+                                            style="width:350px;" tabindex="4" name="users" size="5">
+                                        {% for user_obj in user_list %}
+                                            <option value="{{ user_obj.id }}" >{{ user_obj.profile.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">备注</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" class="form-control" placeholder="备注" cols="40" rows="5"
+                                              name="info"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button class="btn btn-primary" type="submit" id="create_submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block load_js %}
+    <!-- Chosen -->
+    <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- JSKnob -->
+    <script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+
+    <!-- Input Mask-->
+    <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- NouSlider -->
+    <script src="/static/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+    <!-- Switchery -->
+    <script src="/static/js/plugins/switchery/switchery.js"></script>
+
+    <!-- IonRangeSlider -->
+    <script src="/static/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- MENU -->
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Color picker -->
+    <script src="/static/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Clock picker -->
+    <script src="/static/js/plugins/clockpicker/clockpicker.js"></script>
+
+    <!-- Image cropper -->
+    <script src="/static/js/plugins/cropper/cropper.min.js"></script>
+
+    <!-- Date range use moment.js same as full calendar plugin -->
+    <script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+
+    <!-- Date range picker -->
+    <script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- TouchSpin -->
+    <script src="/static/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <!-- Tags Input -->
+    <script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="/static/js/plugins/validate/jquery.validate.js"></script>
+    <script src="/static/js/plugins/validate/messages_zh.js"></script>
+
+    <script>
+        $('.chosen-select').chosen({width: "100%"});
+
+        $(document).ready(function () {
+            $("#create_form").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        maxlength: 10
+                    }
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

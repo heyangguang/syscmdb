@@ -1,0 +1,398 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/dualListbox/bootstrap-duallistbox.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>用户管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>用户详情</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="m-b-md">
+                                    <a href="{% url 'user_modify' %}?uid={{ object.id }}"
+                                       class="btn btn-white btn-xs pull-right">更新用户 </a>
+                                    <h2>{{ object.profile.name }}用户详情</h2>
+                                </div>
+                                <dl class="dl-horizontal">
+                                    <dt>状态:</dt>
+                                    {% if object.is_active %}
+                                        <dd><span class="label label-primary">活跃</span></dd>
+                                    {% else %}
+                                        <dd><span class="label label-danger">禁用</span></dd>
+                                    {% endif %}
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <dl class="dl-horizontal">
+
+                                    <dt>用户名:</dt>
+                                    <dd> {{ object.username }}</dd>
+                                    <dt>邮箱:</dt>
+                                    <dd> {{ object.email }}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-lg-7" id="cluster_info">
+                                <dl class="dl-horizontal">
+
+                                    <dt>用户创建时间:</dt>
+                                    <dd>{{ object.date_joined }}</dd>
+                                    <dt>用户最后登录时间:</dt>
+                                    <dd>{{ object.last_login }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row m-t-sm">
+                            <div class="col-lg-12">
+                                <div class="panel blank-panel">
+                                    <div class="panel-heading">
+                                        <div class="panel-options">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#tab-1" data-toggle="tab">用户详情</a></li>
+                                                <li class=""><a href="#tab-2" data-toggle="tab">授权的资产</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab-1">
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            中文名：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.profile.name }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            用户名：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.username }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            邮箱：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.email }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            角色：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            {% if object.is_superuser %}
+                                                                <b>超级管理员</b>
+                                                            {% else %}
+                                                                <b>普通用户</b>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            失效日期：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.profile.lnvalid_date }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            电话：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.profile.phone }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            微信：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.profile.weixin }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            备注：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.profile.info }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="tab-2">
+
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>状态</th>
+                                                        <th>标题</th>
+                                                        <th>开始时间</th>
+                                                        <th>结束时间</th>
+                                                        <th>备注</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary"><i
+                                                                    class="fa fa-check"></i> 已完成</span>
+                                                        </td>
+                                                        <td>
+                                                            时间从何而来？为什么时间似乎是流动的？
+                                                        </td>
+                                                        <td>
+                                                            2017.12.12 10:10:1
+                                                        </td>
+                                                        <td>
+                                                            2017.12.12 10:16:36
+                                                        </td>
+                                                        <td>
+                                                            <p class="small">
+                                                                在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。
+                                                            </p>
+                                                        </td>
+
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        快速添加用户组
+                    </div>
+
+                    <div class="panel-body">
+                        <center>
+                            <p>
+                                <button type="button" class="btn btn-w-m btn-info" id="submit_groups">提交</button>
+                            </p>
+                        </center>
+                        <div class="col-md-12">
+                            <select data-placeholder="请选择用户组" class="chosen-select"
+                                    multiple="multiple" id="groups_id" tabindex="4">
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}"
+                                            {% if group in object.groups.all %}selected{% endif %}>{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block load_js %}
+    <!-- Chosen -->
+    <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- JSKnob -->
+    <script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+
+    <!-- Input Mask-->
+    <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- NouSlider -->
+    <script src="/static/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+    <!-- Switchery -->
+    <script src="/static/js/plugins/switchery/switchery.js"></script>
+
+    <!-- IonRangeSlider -->
+    <script src="/static/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- MENU -->
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Color picker -->
+    <script src="/static/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Clock picker -->
+    <script src="/static/js/plugins/clockpicker/clockpicker.js"></script>
+
+    <!-- Image cropper -->
+    <script src="/static/js/plugins/cropper/cropper.min.js"></script>
+
+    <!-- Date range use moment.js same as full calendar plugin -->
+    <script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+
+    <!-- Date range picker -->
+    <script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- TouchSpin -->
+    <script src="/static/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <!-- Tags Input -->
+    <script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="/static/js/plugins/validate/jquery.validate.js"></script>
+    <script src="/static/js/plugins/validate/messages_zh.js"></script>
+
+    <!-- Toastr script -->
+    <script src="/static/js/plugins/toastr/toastr.min.js"></script>
+
+    <script>
+        $('.chosen-select').chosen({width: "100%"});
+
+        $("#submit_groups").click(function () {
+            var data = {};
+
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            data['groups'] = $('#groups_id').val();
+            data['uid'] = {{ object.id }}
+
+                $.ajax({
+                    url: '{% url 'user_modify_group' %}',
+                    type: 'post',
+                    data: data,
+                    success: function (res) {
+                        if (res.status == 0) {
+                            toastr.options = {
+                                "closeButton": true,
+                                "debug": false,
+                                "progressBar": true,
+                                "preventDuplicates": false,
+                                "positionClass": "toast-top-right",
+                                "onclick": null,
+                                "showDuration": "400",
+                                "hideDuration": "1000",
+                                "timeOut": "3000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr.success('用户组更新', res.msg);
+                        } else {
+                            toastr.error('用户组更新', res.msg);
+                        }
+                    }
+                })
+        })
+    </script>
+
+{% endblock %}
