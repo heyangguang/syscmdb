@@ -1,0 +1,408 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/dualListbox/bootstrap-duallistbox.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>资源管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>服务器详情</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="m-b-md">
+                                    <a class="btn btn-white btn-xs pull-right" onclick="window.location.href='{% url 'server_list' %}'">返回 </a>
+                                    <h2>{{ object.hostname }}服务器详情</h2>
+                                </div>
+                                <dl class="dl-horizontal">
+                                    <dt>探测状态:</dt>
+                                    {% if object.scan_status %}
+                                        <dd><span class="label label-primary">连接正常</span></dd>
+                                    {% else %}
+                                        <dd><span class="label label-danger">连接异常</span></dd>
+                                    {% endif %}
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <dl class="dl-horizontal">
+
+                                    <dt>管理IP:</dt>
+                                    <dd> {{ object.server_auto.ip_inner }}</dd>
+                                    <dt>管理端口:</dt>
+                                    <dd> {{ object.server_auto.port }}</dd>
+                                    <dt>创建时间:</dt>
+                                    <dd> {{ object.create_date }}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-lg-7" id="cluster_info">
+                                <dl class="dl-horizontal">
+
+                                    <dt>操作系统:</dt>
+                                    <dd>{% if object.server_auto.system_status == 0 %}
+                                        虚拟机{% elif object.server_auto.system_status == 1 %}物理机{% endif %}</dd>
+                                    <dt>机器类型:</dt>
+                                    <dd>{% if object.server_auto.system_status == 0 %}
+                                        Linux{% elif object.server_auto.system_status == 1 %}
+                                        Windows{% elif object.server_auto.system_status == 2 %}Mac{% endif %}</dd>
+                                    <dt>探测刷新时间:</dt>
+                                    <dd>{{ object.update_date }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="row m-t-sm">
+                            <div class="col-lg-12">
+                                <div class="panel blank-panel">
+                                    <div class="panel-heading">
+                                        <div class="panel-options">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#tab-1" data-toggle="tab">用户详情</a></li>
+                                                <li class=""><a href="#tab-2" data-toggle="tab">硬盘信息</a></li>
+                                                <li class=""><a href="#tab-3" data-toggle="tab">网卡信息</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab-1">
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            主机名：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.hostname }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            CPU型号：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.cpu_info }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            CPU物理个数：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.cpu_count }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            内存信息：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.mem_info }}G</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            系统平台：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.os_system }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            系统平台位数：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.os_system_num }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            UUID：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.uuid }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="feed-activity-list">
+                                                    <div class="feed-element">
+                                                        <div class="col-sm-2">
+                                                            SN：
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <b>{{ object.sn }}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="tab-2">
+
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>硬盘名</th>
+                                                        <th>硬盘大小</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for disk in object.disk_set.all %}
+                                                        <tr>
+                                                            <td>{{ disk.name }}</td>
+                                                            <td>{{ disk.size }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            <div class="tab-pane" id="tab-3">
+
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>网卡名</th>
+                                                        <th>网卡IP地址</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for ip in object.ip_set.all %}
+                                                        <tr>
+                                                            <td>{{ ip.name }}</td>
+                                                            <td>{{ ip.ip_address }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="wrapper wrapper-content animated fadeInUp">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        快速归属IDC机房
+                    </div>
+
+                    <div class="panel-body">
+                        <center>
+                            <p>
+                                <button type="button" class="btn btn-w-m btn-info" id="submit_idcs">提交</button>
+                            </p>
+                        </center>
+                        <div class="col-md-12">
+                            <select data-placeholder="请选择IDC机房" class="chosen-select" id="idc_id" >
+                                <option value="">请选择IDC机房</option>
+                                {% for idc in idc_list %}
+                                    <option value="{{ idc.id }}"
+                                            {% if idc.id == object.idcs.id %}selected{% endif %}>{{ idc.name_cn }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block load_js %}
+    <!-- Chosen -->
+    <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- JSKnob -->
+    <script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+
+    <!-- Input Mask-->
+    <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- NouSlider -->
+    <script src="/static/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+    <!-- Switchery -->
+    <script src="/static/js/plugins/switchery/switchery.js"></script>
+
+    <!-- IonRangeSlider -->
+    <script src="/static/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- MENU -->
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Color picker -->
+    <script src="/static/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Clock picker -->
+    <script src="/static/js/plugins/clockpicker/clockpicker.js"></script>
+
+    <!-- Image cropper -->
+    <script src="/static/js/plugins/cropper/cropper.min.js"></script>
+
+    <!-- Date range use moment.js same as full calendar plugin -->
+    <script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+
+    <!-- Date range picker -->
+    <script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- TouchSpin -->
+    <script src="/static/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <!-- Tags Input -->
+    <script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="/static/js/plugins/validate/jquery.validate.js"></script>
+    <script src="/static/js/plugins/validate/messages_zh.js"></script>
+
+    <!-- Toastr script -->
+    <script src="/static/js/plugins/toastr/toastr.min.js"></script>
+
+    <script>
+        $('.chosen-select').chosen({width: "100%"});
+
+        $("#submit_idcs").click(function () {
+            var data = {};
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            data['idc_id'] = $('#idc_id').val();
+            data['server_id'] = {{ object.id }}
+
+                $.ajax({
+                    url: '{% url 'server_modify_idc' %}',
+                    type: 'post',
+                    data: data,
+                    success: function (res) {
+                        if (res.status == 0) {
+                            toastr.success('IDC机房归属更新', res.msg);
+                        } else {
+                            toastr.error('IDC机房归属更新', res.msg);
+                        }
+                    }
+                })
+        })
+    </script>
+
+{% endblock %}

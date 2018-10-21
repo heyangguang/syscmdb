@@ -22,6 +22,7 @@ urlpatterns = [
         url(r'modify_group/$', user_views.UserModifyGroupView.as_view(), name='user_modify_group'),
         url(r'detail/(?P<pk>[0-9]+)/$', user_views.UserDetailView.as_view(), name='user_detail'),
         url(r'create_password/$', user_views.UserConfigPasswordView.as_view(), name='user_create_password'),
+        url(r'get_users/$', user_views.UserGetListView.as_view(), name='user_get_users'),
     ])),
     url(r'group/', include([
         url(r'list/$', group_views.GroupListView.as_view(), name='group_list'),

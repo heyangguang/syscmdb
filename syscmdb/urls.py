@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^users/', include('users.urls')),
     url(r'^resources/', include('resources.urls')),
+    url(r'^products/', include('products.urls')),
 ]

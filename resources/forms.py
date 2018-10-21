@@ -12,3 +12,24 @@ class CreateIdcForm(forms.Form):
     username_phone = forms.CharField(max_length=32, required=True)
     phone = forms.CharField(max_length=32, required=True)
     email = forms.EmailField(required=True)
+
+
+# 服务器接口表单
+class CreateServerForm(forms.Form):
+    hostname = forms.CharField(required=True, max_length=64)
+    cpu_info = forms.CharField(required=True, max_length=64)
+    cpu_count = forms.IntegerField(required=True)
+    mem_info = forms.CharField(required=True, max_length=32)
+    os_system = forms.CharField(required=True, max_length=32)
+    os_system_num = forms.IntegerField(required=True)
+    uuid = forms.CharField(required=True, max_length=64)
+    sn = forms.CharField(required=True, max_length=64)
+    scan_status = forms.IntegerField(required=False)
+
+
+# 服务器发送脚本表单
+class CreateServerAutoForm(forms.Form):
+    ip_inner = forms.CharField(required=True, max_length=32)
+    port = forms.IntegerField(required=True)
+    os_status = forms.IntegerField(required=True)
+    system_status = forms.IntegerField(required=True)

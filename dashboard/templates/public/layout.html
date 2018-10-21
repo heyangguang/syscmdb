@@ -39,14 +39,14 @@
                                 超级管理员{% else %}普通用户{% endif %}<b class="caret"></b></span> </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="profile.html">个人信息</a></li>
+                                <li><a href="{% url 'user_detail' request.user.id %}">个人信息</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'user_logout' %}">注销</a></li>
                             </ul>
                         </div>
                     </li>
                     <li class="{% ifequal request.path '/dashboard/' %}active{% endifequal %}">
-                        <a href="{% url 'index' %}"><i class="fa fa-laptop"></i> <span class="nav-label">仪表盘</span></a>
+                        <a href="{% url 'index' %}"><i class="fa fa-laptop"></i> <span class="nav-label">首页</span></a>
                     </li>
                     <li class="{% if request.path == '/users/user/list/' %}
                                     active
@@ -66,8 +66,14 @@
                                     active
                                {% elif '/users/perm/create/' in request.path %}
                                     active
+                               {% elif '/users/user/set_perm/' in request.path %}
+                                    active
+                               {% elif '/users/group/set_perm/' in request.path %}
+                                    active
+                               {% elif '/users/group/set_perm/' in request.path %}
+                                    active
                                {% endif %}">
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">用户管理</span><span
+                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">系统用户</span><span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li class="
@@ -79,7 +85,9 @@
                                     active
                                {% elif '/users/user/detail/' in request.path %}
                                     active
-                               {% endif %}"><a href="{% url 'user_list' %}">用户列表</a></li>
+                               {% elif '/users/user/set_perm/' in request.path %}
+                                    active
+                               {% endif %}"><a href="{% url 'user_list' %}">用户管理</a></li>
                             <li class="
                                {% if '/users/group/list/' in request.path %}
                                     active
@@ -87,27 +95,59 @@
                                     active
                                {% elif '/users/group/modify/' in request.path %}
                                     active
-                               {% endif %}"><a href="{% url 'group_list' %}">用户组列表</a></li>
+                               {% elif '/users/group/set_perm/' in request.path %}
+                                    active
+                               {% endif %}"><a href="{% url 'group_list' %}">用户组管理</a></li>
                             <li class="
                                {% if '/users/perm/list/' in request.path %}
                                     active
                                {% elif '/users/perm/create/' in request.path %}
                                     active
-                               {% endif %}"><a href="{% url 'perm_list' %}">权限列表</a></li>
+                               {% endif %}"><a href="{% url 'perm_list' %}">系统权限管理</a></li>
                         </ul>
                     </li>
                     <li class="{% if request.path in '/resources/idc/list/' %}
                                     active
+                               {% elif request.path == '/products/product/list/' %}
+                                    active
+                               {% elif request.path in '/resources/servers/list/' %}
+                                    active
+                               {% elif '/resources/servers/detail/' in request.path %}
+                                    active
+                               {% elif request.path in '/resources/servers/set_product/' %}
+                                    active
+                               {% elif request.path in '/resources/serveruser/list/' %}
+                                    active
+                               {% elif '/resources/serveruser/detail/' in request.path %}
+                                    active
                                {% endif %}">
-                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">资源管理</span><span
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">资产管理</span><span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="{% url 'server_list' %}">服务器列表</a></li>
-                            <li><a href="form_advanced.html">业务线列表</a></li>
+                            <li class="
+                               {% if request.path in '/resources/servers/list/' %}
+                                    active
+                               {% elif '/resources/servers/detail/' in request.path %}
+                                    active
+                               {% elif request.path in '/resources/servers/set_product/' %}
+                                    active
+                               {% endif %}"><a href="{% url 'server_list' %}">资产主机</a></li>
+                            <li class="
+                               {% if request.path in '/products/product/list/' %}
+                                    active
+                               {% endif %}"><a href="{% url 'product_list' %}">资产项目</a></li>
                             <li class="
                                {% if request.path in '/resources/idc/list/' %}
                                     active
-                               {% endif %}"><a href="{% url 'idc_list' %}">IDC机房列表</a></li>
+                               {% elif request.path in '/resources/idc/modify/' %}
+                                    active
+                               {% endif %}"><a href="{% url 'idc_list' %}">资产机房</a></li>
+                            <li class="
+                               {% if request.path in '/resources/serveruser/list/' %}
+                                    active
+                               {% elif '/resources/serveruser/detail/' in request.path %}
+                                    active
+                               {% endif %}"><a href="{% url 'serveruser_list' %}">资产用户</a></li>
                         </ul>
                     </li>
                 </ul>

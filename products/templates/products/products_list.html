@@ -1,0 +1,457 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/dualListbox/bootstrap-duallistbox.min.css" rel="stylesheet">
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+
+    <style>
+    </style>
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>资产管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>业务线列表</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="alert alert-info help-message">
+
+            左侧是业务线，点击业务线节点，可展示详细信息
+        </div>
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="ibox-title">业务线展示</div>
+                <div class="mail-box-header">
+                    <a href="{% url 'product_create' %}">
+                        <button type="button" class="btn btn-primary" style="margin-left: 8px">创建业务线</button>
+                    </a>
+                    <a href="{% url 'product_create_host' %}">
+                        <button type="button" class="btn btn-primary" style="margin-left: 30px">创建机器组</button>
+                    </a>
+                    <div id="container"></div>
+                </div>
+
+            </div>
+            <div class="col-xs-9">
+                <div class="ibox-title">业务线详情</div>
+                <div class="mail-box-header">
+
+                    <div id="InfoProduct" style="display: none">
+
+                        <ul class="list-unstyled">
+
+                            <div class="feed-element">
+                                <div class="col-sm-2">
+                                    简称：
+                                </div>
+                                <div class="col-sm-8">
+                                    <b id="name"></b>
+                                </div>
+                            </div>
+
+                            <div class="feed-element">
+                                <div class="col-sm-2">
+                                    业务线名称：
+                                </div>
+                                <div class="col-sm-8">
+                                    <b id="name_cn"></b>
+                                </div>
+                            </div>
+
+                            <div class="feed-element">
+                                <div class="col-sm-2">
+                                    上级业务线：
+                                </div>
+                                <div class="col-sm-8">
+                                    <b id="pname"></b>
+                                </div>
+                            </div>
+
+                            <div class="feed-element">
+                                <div class="col-sm-2">
+                                    业务负责人：
+                                </div>
+                                <div class="col-sm-8">
+                                    <b id="dev_interface"></b>
+                                </div>
+                            </div>
+
+                            <div class="feed-element">
+                                <div class="col-sm-2">
+                                    运维负责人：
+                                </div>
+                                <div class="col-sm-8">
+                                    <b id="op_interface"></b>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div id="HostServerShow" style="display: none">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="ibox float-e-margins">
+                                            <h5><b>服务器列表</b></h5>
+                                            <table class="table table-striped table-bordered table-hover  dataTable no-footer">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-center">主机名</th>
+                                                    <th class="text-center">管理IP</th>
+                                                    <th class="text-center">探测状态</th>
+                                                    <th class="text-center">机房</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="host_body">
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feed-element">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-block btn-outline btn-primary" id="info_modify_btn">修改
+                                    </button>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <div id="ModifyInfoProduct" style="display: none">
+                        <form class="form-horizontal" role="form">
+                            <h3>修改业务线</h3>
+                            <div class="form-group"><label class="col-md-2 control-label">简称</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="简称" id="modify_name">
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">业务线名称</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="业务线名称" id="modify_name_cn">
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">上级业务线</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="上级业务线" id="modify_pname"
+                                           disabled="disabled">
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label" for="modify_dev_interface">业务负责人</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="业务负责人" class="chosen-select" multiple
+                                            style="width:350px;" tabindex="4" id="modify_dev_interface">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label" for="modify_op_interface">运维负责人</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="运维负责人" class="chosen-select" multiple
+                                            style="width:350px;" tabindex="4" id="modify_op_interface">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="button" id="show_info_product">返回</button>
+                                    <button class="btn btn-primary" type="button" onclick="submit_data()">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+
+{% block load_js %}
+    <script src="/static/js/plugins/jsTree/jstree.min.js"></script>
+    <!-- Chosen -->
+    <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- JSKnob -->
+    <script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+
+    <!-- Input Mask-->
+    <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- NouSlider -->
+    <script src="/static/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+    <!-- Switchery -->
+    <script src="/static/js/plugins/switchery/switchery.js"></script>
+
+    <!-- IonRangeSlider -->
+    <script src="/static/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- MENU -->
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Color picker -->
+    <script src="/static/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Clock picker -->
+    <script src="/static/js/plugins/clockpicker/clockpicker.js"></script>
+
+    <!-- Image cropper -->
+    <script src="/static/js/plugins/cropper/cropper.min.js"></script>
+
+    <!-- Date range use moment.js same as full calendar plugin -->
+    <script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+
+    <!-- Date range picker -->
+    <script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- TouchSpin -->
+    <script src="/static/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <!-- Tags Input -->
+    <script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="/static/js/plugins/validate/jquery.validate.js"></script>
+    <script src="/static/js/plugins/validate/messages_zh.js"></script>
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+    <script>
+        var data_modify;
+        var product_id;
+        var infomatioin_div = $('#InfoProduct');
+        var name_data = $('#name');
+        var name_cn_data = $('#name_cn');
+        var pname_data = $('#pname');
+        var dev_interface_data = $('#dev_interface');
+        var op_interface_data = $('#op_interface');
+        var modifyinfoproduct_div = $('#ModifyInfoProduct');
+        var modify_name = $('#modify_name');
+        var modify_name_cn = $('#modify_name_cn');
+        var modify_pname = $('#modify_pname');
+        var modify_dev_interface_div = $('#modify_dev_interface');
+        var modify_op_interface_div = $('#modify_op_interface');
+        var submit_modify = $('#create_submit');
+        var hostservershow_div = $('#HostServerShow');
+        var host_body = $('#host_body');
+
+
+        $('#container').jstree({
+            'core': {
+                'data':{{ ztree|safe }}
+            }
+        });
+
+        function show_infoproduct(product_id) {
+            var data = {};
+            data['product_id'] = product_id;
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+
+            $.post('{% url 'product_list' %}', data, function (res) {
+                modifyinfoproduct_div.hide();
+                if (res.status == 0) {
+                    data_modify = res;
+                    name_data.text(res.product_name);
+                    name_cn_data.text(res.product_name_cn);
+                    pname_data.text(res.product_pname);
+                    dev_interface_data.text(res.dev_interface);
+                    op_interface_data.text(res.op_interface);
+                    infomatioin_div.show()
+                } else {
+                    console.log('失败');
+                }
+            })
+        }
+
+        $('#info_modify_btn').click(function () {
+            infomatioin_div.hide();
+            modify_name.val(data_modify.product_name);
+            modify_name_cn.val(data_modify.product_name_cn);
+            modify_pname.val(data_modify.product_pname);
+            $.get("{% url 'user_get_users' %}", function (res) {
+                users = res;
+                var selected_dev_email = data_modify.dev_interface.split(",");
+                modify_dev_interface_div.empty().chosen("destroy");
+
+                var selected_op_email = data_modify.op_interface.split(",");
+                modify_op_interface_div.empty().chosen("destroy");
+
+                $.each(users, function (n, obj) {
+                    var op_option;
+                    var dev_option;
+                    if ($.inArray(obj.email, selected_op_email) >= 0) {
+                        op_option = '<option value="' + obj.email + '" selected>';
+                    } else {
+                        op_option = '<option value="' + obj.email + '">';
+                    }
+                    op_option += obj.email + ' | ' + obj.username + '</option>';
+                    modify_op_interface_div.append(op_option);
+                    console.log(op_option);
+
+                    if ($.inArray(obj.email, selected_dev_email) >= 0) {
+                        dev_option = '<option value="' + obj.email + '" selected>';
+                    } else {
+                        dev_option = '<option value="' + obj.email + '">';
+                    }
+                    dev_option += obj.email + ' | ' + obj.username + '</option>';
+                    modify_dev_interface_div.append(dev_option)
+
+                });
+                $('.chosen-select').chosen({width: "100%", disable_search_threshold: 3});
+
+                modifyinfoproduct_div.show();
+            });
+
+
+        });
+
+        $('#show_info_product').click(function () {
+            modifyinfoproduct_div.hide();
+            infomatioin_div.show();
+        });
+
+        $('#container').on("changed.jstree", function (e, data) {
+            hostservershow_div.hide();
+            product_id = data.node.id;
+            show_infoproduct(data.node.id);
+            show_host(data.node.id, data.node.original.level);
+        });
+
+        $('.chosen-select').chosen({width: "100%"});
+
+        function show_host(id, level) {
+            if (level == 3) {
+                host_body.empty();
+                var data = {
+                    'id': id
+                };
+                $.get('{% url 'server_get' %}', data, function (res) {
+                    $.each(res.data, function (n, obj) {
+                        var scan;
+                        if (obj.scan_status == 1) {
+                            scan = '<dd><span class="label label-primary">连接正常</span></dd>'
+                        } else {
+                            scan = '<dd><span class="label label-danger">连接异常</span></dd>'
+                        }
+                        var hostname = '<a href=/resources/servers/detail/'+ obj.id +'>' + obj.hostname + '</a>';
+                        host_body.append("<tr><td class=\"text-center\">" + hostname + "</td><td class=\"text-center\">" + obj.server_auto__ip_inner + "</td><td class=\"text-center\">" + scan + "</td><td class=\"text-center\">" + obj.idcs__name_cn + "</td></tr>");
+                    });
+                    hostservershow_div.show();
+                })
+            }
+        }
+
+        function submit_data() {
+            var modify_data = {
+                "id": product_id,
+                "name": modify_name.val(),
+                "name_cn": modify_name_cn.val(),
+                "dev_interface": modify_dev_interface_div.val(),
+                "op_interface": modify_op_interface_div.val(),
+                "csrfmiddlewaretoken": '{{ csrf_token }}'
+            };
+
+            $.ajax({
+                url: '{% url 'product_modify' %}',
+                data: modify_data,
+                type: 'post',
+                success: function (res) {
+                    if (res.status == 0) {
+                        swal({
+                            title: res.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.href = '{% url 'product_list' %}';
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                }
+            })
+        };
+
+
+    </script>
+
+{% endblock %}

@@ -66,9 +66,8 @@ class UserCreateView(LoginRequiredMixin, TemplateView):
         user_form = CreateUserForm(request.POST)
         profile_form = CreateProfileForm(request.POST)
 
-        print('表单提交失败')
         print(user_form.errors)
-        print(profile_form.errors)
+        print(user_form.cleaned_data)
 
         if user_form.is_valid() and profile_form.is_valid():
 
@@ -110,7 +109,8 @@ class UserCreateView(LoginRequiredMixin, TemplateView):
                 send_mail(settings.EMAIL_USER, settings.EMAIL_PASSWORD, user.email,
                           settings.EMAIL_TITLE, contnet, settings.EMAIL_HOST, settings.EMAIL_PORT)
                 print('邮件发送OK...')
-            except:
+            except Exception as e:
+                print(e)
                 print('邮件发送失败...')
 
         return redirect(reverse('user_list'))
@@ -380,3 +380,11 @@ class UserSetPermView(TemplateView):
             ret['msg'] = '设置失败'
 
         return JsonResponse(ret)
+
+
+class UserGetListView(View):
+
+    def get(self, request):
+        users = User.objects.values('id', 'email', 'username')
+        print(request)
+        return JsonResponse(list(users), safe=False)

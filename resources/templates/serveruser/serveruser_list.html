@@ -1,0 +1,155 @@
+{% extends 'public/layout.html' %}
+{% load serveruser_tag %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>资源管理</a>
+                </li>
+
+
+                <li class="active">
+                    <strong>资产用户</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>资产用户列表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <a href="{% url 'serveruser_create' %}" class="btn btn-sm btn-primary"> 添加资产用户 </a>
+                        <table class="table table-striped table-bordered table-hover  dataTable no-footer">
+                            <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">名称</th>
+                                <th class="text-center">用户</th>
+                                <th class="text-center">关联资产</th>
+                                <th class="text-center">备注</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for serveruser_obj in object_list %}
+                                <tr>
+                                    <td class="text-center">{{ forloop.counter }}</td>
+                                    <td class="text-center">{{ serveruser_obj.name }}</td>
+                                    <td class="text-center">{{ serveruser_obj.username }}</td>
+                                    <td class="text-center">{{ serveruser_obj.server_set.all | serveruser_count }}</td>
+                                    <td class="text-center">{{ serveruser_obj.info }}</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-xs btn-info"
+                                           href="{% url 'serveruser_detail' serveruser_obj.id %}">编辑</a>
+                                        <a class="btn btn-xs btn-danger" id="serveruser_delete"
+                                           onclick="">删除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <center>
+                                <div class="btn-group">
+                                    <a class="btn btn-white" href="{% url 'idc_list' %}?page=1">首页</a>
+                                    {% if page_obj.has_previous %}
+                                        <a class="btn btn-white" type="button"
+                                           href="?page={{ page_obj.previous_page_number }}">
+                                            上一页
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-white" type="button" disabled="disabled">上一页</a>
+                                    {% endif %}
+
+                                    {% for page in page_range %}
+                                        {% ifequal page page_obj.number %}
+                                            <a class="btn btn-white active">{{ page }}</a>
+                                        {% else %}
+                                            <a href="?page={{ page }}" class="btn btn-white">{{ page }}</a>
+                                        {% endifequal %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                        <a class="btn btn-white" type="button"
+                                           href="?page={{ page_obj.next_page_number }}">
+                                            下一页
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-white" type="button" disabled>下一页</a>
+                                    {% endif %}
+                                    <a class="btn btn-white"
+                                       href="{% url 'idc_list' %}?page={{ paginator.num_pages }}">末页</a>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block load_js %}
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script>
+
+        function idc_delete(idc_id) {
+            var data = {};
+            data['idc_id'] = idc_id;
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            $.ajax({
+                url: '{% url 'idc_delete' %}',
+                type: 'post',
+                data: data,
+                success: function (res) {
+                    if (res.status == 0) {
+                        swal({
+                            title: res.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.reload()
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                }
+            })
+        };
+    </script>
+{% endblock %}

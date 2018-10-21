@@ -63,13 +63,13 @@
                             <thead>
                             <tr>
                                 <th class="text-center">#</th>
-                                <th class="text-center">机房</th>
-                                <th class="text-center">业务线</th>
-                                <th class="text-center">产品线</th>
                                 <th class="text-center">主机名</th>
                                 <th class="text-center">管理IP</th>
                                 <th class="text-center">机器类型</th>
                                 <th class="text-center">探测状态</th>
+                                <th class="text-center">机房</th>
+                                <th class="text-center">业务线</th>
+                                <th class="text-center">产品线</th>
                                 <th class="text-center">操作</th>
                             </tr>
                             </thead>
@@ -77,18 +77,32 @@
                             {% for server_obj in object_list %}
                                 <tr>
                                     <td class="text-center">{{ forloop.counter }}</td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center">{{ server_obj.username }}</td>
-                                    <td class="text-center">{{ server_obj.ip_inner }}</td>
-                                    <td class="text-center">{{ server_obj.server_auto.system_status }}</td>
-                                    <td class="text-center">{{ server_obj.scan_status }}</td>
+                                    <td class="text-center"><a
+                                            href="{% url 'server_detail' server_obj.id %}">{{ server_obj.hostname }}</a>
+                                    </td>
+                                    <td class="text-center">{{ server_obj.server_auto.ip_inner }}</td>
+                                    <td class="text-center">{% if server_obj.server_auto.system_status == 0 %}
+                                        虚拟机{% elif server_obj.server_auto.system_status == 1 %}物理机{% endif %}</td>
+                                    <td class="text-center">{% if server_obj.scan_status %}
+                                        <dd><span class="label label-primary">连接正常</span></dd>
+                                    {% else %}
+                                        <dd><span class="label label-danger">连接异常</span></dd>
+                                    {% endif %}</td>
+                                    <td class="text-center">
+                                        {% if server_obj.idcs.id %}{{ server_obj.idcs.name_cn }}{% else %}-{% endif %}</td>
+                                    <td class="text-center">
+                                        {% if server_obj.product_one %}{{ server_obj.product_one.name_cn }}{% else %}
+                                            -{% endif %}</td>
+                                    <td class="text-center">
+                                        {% if server_obj.product_two %}{{ server_obj.product_two.name_cn }}{% else %}
+                                            -{% endif %}</td>
                                     <td class="text-center">
                                         <a class="btn btn-xs btn-info"
-                                           href="">更新</a>
-                                        <a class="btn btn-xs btn-danger" id="idc_delete"
-                                           onclick="idc_delete({{ idc_obj.id }})">删除</a>
+                                           onclick="server_flush({{ server_obj.id }})">刷新探测</a>
+                                        <a class="btn btn-xs btn-primary"
+                                           href="{% url 'server_set_product' %}?id={{ server_obj.id }}">设置业务线</a>
+                                        <a class="btn btn-xs btn-danger"
+                                           onclick="server_delete({{ server_obj.id }})">删除</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -110,7 +124,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form id="create_host_form">
-                                        {% csrf_token %}
+                                            {% csrf_token %}
                                             <div class="form-group">
                                                 <label class="col-md-12 control-label">主机IP</label>
                                                 <input type="text" class="form-control" placeholder="主机IP"
@@ -121,6 +135,15 @@
                                                 <label class="col-md-12 control-label">主机端口</label>
                                                 <input type="text" class="form-control" placeholder="主机端口(基于SSH)"
                                                        name="port">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-12 control-label">系统用户</label>
+                                                <select class="select2_demo_1 form-control" name="serveruser_id">
+                                                    {% for system_user in systemuser_list %}
+                                                        <option value="{{ system_user.id }}">{{ system_user.name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
 
                                             <div class="form-group">
@@ -200,6 +223,9 @@
     <script src="/static/js/plugins/ladda/spin.min.js"></script>
     <script src="/static/js/plugins/ladda/ladda.min.js"></script>
     <script src="/static/js/plugins/ladda/ladda.jquery.min.js"></script>
+
+    <!-- Toastr script -->
+    <script src="/static/js/plugins/toastr/toastr.min.js"></script>
     <script>
         $('#submit_host').click(function () {
             var btn = $(this).ladda();
@@ -232,5 +258,70 @@
             })
 
         })
+
+        function server_delete(server_id) {
+            var data = {};
+            data['server_id'] = server_id;
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            $.ajax({
+                url: '{% url 'server_delete' %}',
+                type: 'post',
+                data: data,
+                success: function (res) {
+                    if (res.status == 0) {
+                        swal({
+                            title: res.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.reload()
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                }
+            })
+        };
+
+        function server_flush(server_id) {
+            var data = {};
+            data['server_id'] = server_id;
+            data['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "progressBar": true,
+                "preventDuplicates": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "1000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "onHidden": function () {
+                    window.location.reload();
+                }
+            };
+            $.ajax({
+                url: '{% url 'server_flush' %}',
+                type: 'post',
+                data: data,
+                success: function (res) {
+                    if (res.status == 0) {
+                        toastr.success('刷新探测', res.msg);
+                    } else {
+                        toastr.error('刷新探测', res.msg);
+                    }
+                }
+            })
+        }
     </script>
 {% endblock %}

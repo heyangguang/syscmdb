@@ -1,0 +1,293 @@
+{% extends 'public/layout.html' %}
+
+{% block load_css %}
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/cropper/cropper.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/nouslider/jquery.nouislider.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
+    <link href="/static/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/dualListbox/bootstrap-duallistbox.min.css" rel="stylesheet">
+
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block mbx %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-10">
+            <h2></h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'index' %}">仪表盘</a>
+                </li>
+
+                <li>
+                    <a>资产管理</a>
+                </li>
+
+
+                <li>
+                    <a href="{% url 'server_list' %}">服务器列表</a>
+                </li>
+
+                <li class="active">
+                    <strong>设置业务线</strong>
+                </li>
+
+            </ol>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>设置业务线</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+
+                        <form class="form-horizontal" enctype="multipart/form-data" id="create_form">
+                            {% csrf_token %}
+                            <h3>业务线表单</h3>
+                            <div class="form-group"><label class="col-md-2 control-label">主机名</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="主机名" id="hostname"
+                                           value="{{ server.hostname }}" disabled="disabled">
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">管理IP</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="管理IP" id="inner_ip"
+                                           value="{{ server.server_auto.ip_inner }}" disabled="disabled">
+                                </div>
+                            </div>
+
+                            <input type="hidden" value="{{ server.id }}" id="server_id">
+
+                            <div class="form-group"><label class="col-md-2 control-label">业务线</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="请选择上级业务线" class="chosen-select"
+                                            style="width:350px;" tabindex="4" id="product_one" size="5">
+                                        {% for product_one in product_one_list %}
+                                            <option value="{{ product_one.id }}"
+                                                    {% if server.product_one_id == product_one.id %}selected{% endif %}>{{ product_one.name_cn }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">产品线</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="请选择产品线" class="select2_demo_1 form-control"
+                                            id="product_two">
+                                        {% for product_two in product_two_list %}
+                                            {% if product_two.pid == server.product_one_id %}
+                                                <option value="{{ product_two.id }}"
+                                                        {% if server.product_two_id == product_two.id %}selected{% endif %}>{{ product_two.name_cn }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-md-2 control-label">机器组</label>
+                                <div class="col-md-9">
+                                    <select data-placeholder="请选择机器组" class="select2_demo_1 form-control"
+                                            id="product_host">
+                                        {% for product_host in product_host_list %}
+                                            {% if product_host.pid == server.product_two_id %}
+                                                <option value="{{ product_host.id }}"
+                                                        {% if server.product_host_id == product_host.id %}selected{% endif %}>{{ product_host.name_cn }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="button" onclick="history.back()">返回</button>
+                                    <button class="btn btn-primary" type="button" onclick="submit_data()">提交</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block load_js %}
+    <!-- Chosen -->
+    <script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+
+    <!-- JSKnob -->
+    <script src="/static/js/plugins/jsKnob/jquery.knob.js"></script>
+
+    <!-- Input Mask-->
+    <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <!-- NouSlider -->
+    <script src="/static/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+    <!-- Switchery -->
+    <script src="/static/js/plugins/switchery/switchery.js"></script>
+
+    <!-- IonRangeSlider -->
+    <script src="/static/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- MENU -->
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Color picker -->
+    <script src="/static/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+    <!-- Clock picker -->
+    <script src="/static/js/plugins/clockpicker/clockpicker.js"></script>
+
+    <!-- Image cropper -->
+    <script src="/static/js/plugins/cropper/cropper.min.js"></script>
+
+    <!-- Date range use moment.js same as full calendar plugin -->
+    <script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+
+    <!-- Date range picker -->
+    <script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Select2 -->
+    <script src="/static/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- TouchSpin -->
+    <script src="/static/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <!-- Tags Input -->
+    <script src="/static/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- Dual Listbox -->
+    <script src="/static/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="/static/js/plugins/validate/jquery.validate.js"></script>
+    <script src="/static/js/plugins/validate/messages_zh.js"></script>
+
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+    <script>
+        var product_one = $('#product_one');
+        var product_two = $('#product_two');
+        $('.chosen-select').chosen({width: "100%"});
+
+        product_one.change(function () {
+            data = {};
+            product_one_id = $(this).val();
+            data['product_id'] = product_one_id;
+            $.get('{% url 'product_get' %}', data, function (res) {
+                product_two.empty();
+                $('#product_host').empty();
+                product_two.append('<option value="">请选择</option>');
+                $.each(res.data, function (i, obj) {
+                    $('#product_two').append('<option value="' + obj.id + '">' + obj.name_cn + '</option>');
+                });
+            });
+        });
+
+        product_two.change(function () {
+            data1 = {};
+            product_two_id = $(this).val();
+            console.log(product_two_id);
+            data1['product_id'] = product_two_id;
+            $.get('{% url 'product_get' %}', data1, function (res) {
+                $('#product_host').empty();
+                $.each(res.data, function (i, obj) {
+                    $('#product_host').append('<option value="' + obj.id + '">' + obj.name_cn + '</option>');
+                });
+            });
+        });
+
+        function submit_data() {
+            var data2 = {};
+            data2['server_id'] = $('#server_id').val();
+            data2['product_one'] = $('#product_one').val();
+            data2['product_two'] = $('#product_two').val();
+            data2['product_host'] = $('#product_host').val();
+            data2['csrfmiddlewaretoken'] = "{{ csrf_token }}";
+
+            $.ajax({
+                url: '{% url 'server_set_product' %}',
+                data: data2,
+                type: 'post',
+                success: function (res) {
+                    if (res.status == 0) {
+                        swal({
+                            title: res.msg,
+                            type: 'success',
+                            confirmButtonText: "OK"
+                        }, function () {
+                            window.location.href = '{% url 'server_list' %}';
+                        });
+                    } else {
+                        swal({
+                            title: res.msg,
+                            type: 'error',
+                            confirmButtonText: "知道了"
+                        });
+                    }
+                }
+            })
+        };
+    </script>
+{% endblock %}

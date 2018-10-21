@@ -4,13 +4,18 @@ import psutil
 # 版本信息
 import platform
 import os
-from urllib import request
 import json
+import requests
+import sys
 
 class GetData(object):
 
-    def __init__(self):
+    def __init__(self, server_auto_id):
         self.ret = {}
+        self.server_auto_id = server_auto_id
+
+    def get_server_auto_id(self):
+        return self.server_auto_id
 
     def get_hostname(self):
         return platform.node()
@@ -29,7 +34,7 @@ class GetData(object):
         return psutil.cpu_count(logical=False)
 
     def get_mem_info(self):
-        return '%.2fG' %(psutil.virtual_memory().total/1024/1024/1024)
+        return '%.2f' %(psutil.virtual_memory().total/1024/1024/1024)
 
     def get_disk_info(self):
         disk_name_list = []
@@ -67,16 +72,22 @@ class GetData(object):
         data_dict = GetData.__dict__
         for key,value in data_dict.items():
             if 'get_' in key:
-                key = key.strip('get_')
+                key = key.replace('get_', '')
                 self.ret[key] = value(self)
         return self.ret
 
-def send_data(url, data):
-    data = data.encode('utf-8')
-    response = request.urlopen(url=url, data=data)
-    print(response.read())
+def send_data(url, data, status):
+    if status == '1':
+        response = requests.put(url, data)
+        print(response.text)
+    elif status == '0':
+        response = requests.post(url, data)
+        print(response.text)
+    # data = data.encode('utf-8')
+    # response = request.urlopen(url=url, data=data)
+    # print(response.read())
 
 
 if __name__ == '__main__':
-    getdata = GetData().send_data()
-    send_data(url='http://10.10.10.100:8000/resources/servers/data_api/', data="{'status': 0}")
+    getdata = GetData(sys.argv[1]).send_data()
+    send_data(url='http://10.10.10.100:8000/resources/servers/data_api/', data=json.dumps(getdata), status=sys.argv[2])

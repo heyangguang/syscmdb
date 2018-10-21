@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard.apps.DashboardConfig',
     'users.apps.UsersConfig',
-    'users.templatetags',
+    'users.templatetags.group_tag',
     'resources.apps.ResourcesConfig',
+    'resources.templatetags.serveruser_tag',
+    'products.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,20 +123,20 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 LOGIN_URL = '/users/login/'
 
-EMAIL_USER  = '13833232533@163.com'
-EMAIL_PASSWORD = 'admin123'
+EMAIL_USER  = '1052973860@qq.com'
+EMAIL_PASSWORD = 'rlmtojyjuxkzbfcc'
 EMAIL_PORT = 25
-EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST = 'smtp.qq.com'
 EMAIL_TITLE = '[syscmdb]'
 HOST_URL = 'http://10.10.10.100:8000'
 

@@ -1,14 +1,23 @@
 # _*_ coding: utf-8 _*_
 __author__ = 'HeYang'
 from django import forms
-from django.contrib.auth.models import Group, ContentType
-
+from django.contrib.auth.models import Group, ContentType, User
+from django.core.exceptions import ValidationError
 
 # 创建用户表单
 class CreateUserForm(forms.Form):
     username = forms.CharField(max_length=20, min_length=4, required=True)
     email = forms.EmailField(required=True)
     is_superuser = forms.IntegerField(required=True)
+
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     user = User.objects.filter(email=email)
+    #     if user:
+    #         raise ValidationError('邮箱已经存在')
+    #     else:
+    #         return email
+
 
 
 class CreateProfileForm(forms.Form):
