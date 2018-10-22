@@ -2,19 +2,19 @@
 $(function() {
 
     var data = [{
-        label: "iPhone",
+        label: "苹果手机",
         data: 21,
         color: "#d3d3d3",
     }, {
-        label: "Samsung",
+        label: "三星",
         data: 3,
         color: "#bababa",
     }, {
-        label: "Windows",
+        label: "微软",
         data: 15,
         color: "#79d2c0",
     }, {
-        label: "Blackberry",
+        label: "黑莓",
         data: 52,
         color: "#1ab394",
     }];
@@ -88,19 +88,19 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Client 1",
+        label: "客户 1",
         data: 21,
         color: "#d3d3d3",
     }, {
-        label: "Client 2",
+        label: "客户 2",
         data: 3,
         color: "#bababa",
     }, {
-        label: "Client 3",
+        label: "客户 3",
         data: 15,
         color: "#79d2c0",
     }, {
-        label: "Client 4",
+        label: "客户 4",
         data: 52,
         color: "#1ab394",
     }];
@@ -132,19 +132,19 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Carriers 1",
+        label: "运营商 1",
         data: 21,
         color: "#d3d3d3",
     }, {
-        label: "Carriers 2",
+        label: "运营商 2",
         data: 3,
         color: "#bababa",
     }, {
-        label: "Carriers 3",
+        label: "运营商 3",
         data: 15,
         color: "#79d2c0",
     }, {
-        label: "Carriers 4",
+        label: "运营商 4",
         data: 52,
         color: "#1ab394",
     }];
@@ -175,11 +175,11 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Male",
+        label: "男",
         data: 50,
         color: "#d3d3d3",
     },{
-        label: "Female",
+        label: "女",
         data: 50,
         color: "#1ab394",
     }];
@@ -257,15 +257,15 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "High",
+        label: "高",
         data: 20,
         color: "#d3d3d3",
     }, {
-        label: "Medium",
+        label: "中",
         data: 40,
         color: "#1ab394",
     }, {
-        label: "Low",
+        label: "低",
         data: 40,
         color: "#79d2c0",
     }];
@@ -296,11 +296,11 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Business",
+        label: "商业",
         data: 60,
         color: "#1ab394",
     }, {
-        label: "Private",
+        label: "私营",
         data: 40,
         color: "#79d2c0",
     }];
@@ -331,23 +331,23 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Auto",
+        label: "汽车",
         data: 21,
         color: "#d3d3d3",
     }, {
-        label: "Sports",
+        label: "体育",
         data: 3,
         color: "#bababa",
     }, {
-        label: "Health",
+        label: "健康",
         data: 15,
         color: "#79d2c0",
     }, {
-        label: "Education",
+        label: "教育",
         data: 37,
         color: "#1ab394",
     }, {
-        label: "Other",
+        label: "其他",
         data: 15,
         color: "#79d2c0",
     }];

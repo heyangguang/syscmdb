@@ -102,19 +102,19 @@ $(function() {
 $(function() {
 
     var data = [{
-        label: "Sales 1",
+        label: "销售 1",
         data: 21,
         color: "#d3d3d3",
     }, {
-        label: "Sales 2",
+        label: "销售 2",
         data: 3,
         color: "#bababa",
     }, {
-        label: "Sales 3",
+        label: "销售 3",
         data: 15,
         color: "#79d2c0",
     }, {
-        label: "Sales 4",
+        label: "销售 4",
         data: 52,
         color: "#1ab394",
     }];
@@ -253,10 +253,10 @@ $(function() {
     function doPlot(position) {
         $.plot($("#flot-line-chart-multi"), [{
             data: oilprices,
-            label: "Oil price ($)"
+            label: "油价 ($)"
         }, {
             data: exchangerates,
-            label: "USD/EUR exchange rate",
+            label: "美元/欧元汇率",
             yaxis: 2
         }], {
             xaxes: [{

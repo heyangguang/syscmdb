@@ -64,13 +64,13 @@ $(function() {
     Morris.Donut({
         element: 'morris-donut-chart',
         data: [{
-            label: "Download Sales",
+            label: "下载销售",
             value: 12
         }, {
-            label: "In-Store Sales",
+            label: "店内销售",
             value: 30
         }, {
-            label: "Mail-Order Sales",
+            label: "邮购销售",
             value: 20
         }],
         resize: true
@@ -109,7 +109,7 @@ $(function() {
         }],
         xkey: 'y',
         ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
+        labels: ['系列A', '系列B'],
         hideHover: 'auto',
         resize: true
     });

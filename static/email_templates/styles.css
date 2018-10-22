@@ -1,6 +1,6 @@
 /* -------------------------------------
-    GLOBAL
-    A very basic CSS reset
+    全局
+    一个非常基本的CSS重置
 ------------------------------------- */
 * {
     margin: 0;
@@ -22,13 +22,13 @@ body {
     line-height: 1.6;
 }
 
-/* Let's make sure all tables have defaults */
+/* 让我们确保所有表都有默认值 */
 table td {
     vertical-align: top;
 }
 
 /* -------------------------------------
-    BODY & CONTAINER
+    身体和容器
 ------------------------------------- */
 body {
     background-color: #f6f6f6;
@@ -43,7 +43,7 @@ body {
     display: block !important;
     max-width: 600px !important;
     margin: 0 auto !important;
-    /* makes it centered */
+    /* 使其居中 */
     clear: both !important;
 }
 
@@ -90,7 +90,7 @@ body {
 }
 
 /* -------------------------------------
-    TYPOGRAPHY
+    活版印刷
 ------------------------------------- */
 h1, h2, h3 {
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -128,7 +128,7 @@ p li, ul li, ol li {
 }
 
 /* -------------------------------------
-    LINKS & BUTTONS
+    链接和按钮
 ------------------------------------- */
 a {
     color: #1ab394;
@@ -151,7 +151,7 @@ a {
 }
 
 /* -------------------------------------
-    OTHER STYLES THAT MIGHT BE USEFUL
+    其他可能有用的样式
 ------------------------------------- */
 .last {
     margin-bottom: 0;
@@ -178,8 +178,8 @@ a {
 }
 
 /* -------------------------------------
-    ALERTS
-    Change the class depending on warning email, good email or bad email
+    警报
+    根据警告电子邮件，好的电子邮件或不好的电子邮件更改课程
 ------------------------------------- */
 .alert {
     font-size: 16px;
@@ -206,8 +206,8 @@ a {
 }
 
 /* -------------------------------------
-    INVOICE
-    Styles for the billing table
+    发票
+    计费表的样式
 ------------------------------------- */
 .invoice {
     margin: 40px auto;
@@ -230,7 +230,7 @@ a {
 }
 
 /* -------------------------------------
-    RESPONSIVE AND MOBILE FRIENDLY STYLES
+    响应和移动友好的样式
 ------------------------------------- */
 @media only screen and (max-width: 640px) {
     h1, h2, h3, h4 {

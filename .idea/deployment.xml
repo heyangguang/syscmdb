@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="ssh://root@10.10.10.100:22/root/syscmdb/bin/python3" autoUploadExternalChanges="true" showEqualInSync="true" showNewOnTargetInSync="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ssh://root@10.10.10.100:22/root/syscmdb/bin/python3">
     <serverData>
       <paths name="ssh://root@10.10.10.100:22/root/syscmdb/bin/python3">
         <serverdata>
           <mappings>
-            <mapping deploy="/tmp/syscmdb" local="$PROJECT_DIR$" />
+            <mapping deploy="/tmp/syscmdb" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
