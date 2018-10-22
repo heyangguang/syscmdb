@@ -2,15 +2,19 @@
 __author__ = 'HeYang'
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from resources.models import ServerUser, Server
 
 
-class ServerUserListView(ListView):
+# 主机资源用户展示
+class ServerUserListView(LoginRequiredMixin, ListView):
     template_name = 'serveruser/serveruser_list.html'
     model = ServerUser
 
-class ServerUserCreateView(TemplateView):
+
+# 主机资源用户创建
+class ServerUserCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'serveruser/serveruser_create.html'
 
     def get_context_data(self, **kwargs):
@@ -41,7 +45,8 @@ class ServerUserCreateView(TemplateView):
         return JsonResponse(ret)
 
 
-class ServerUserDetailView(DetailView):
+# 主机资源用户详情信息
+class ServerUserDetailView(LoginRequiredMixin, DetailView):
     template_name = 'serveruser/serveruser_detail.html'
     model = ServerUser
 
@@ -51,7 +56,8 @@ class ServerUserDetailView(DetailView):
         return context
 
 
-class ServerUserModifyView(View):
+# 主机资源用户修改
+class ServerUserModifyView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}

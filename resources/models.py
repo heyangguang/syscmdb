@@ -1,6 +1,7 @@
 from django.db import models
 from products.models import Product
 
+
 # Create your models here.
 
 
@@ -15,6 +16,13 @@ class Idc(models.Model):
 
     class Meta:
         db_table = 'resources_idc'
+        default_permissions = []
+        permissions = (
+            ('add_idc', '添加机房'),
+            ('delete_idc', '删除机房'),
+            ('view_idc', '查看机房'),
+            ('modify_idc', '修改机房'),
+        )
 
 
 class ServerAuto(models.Model):
@@ -25,12 +33,15 @@ class ServerAuto(models.Model):
         (1, 'Windows'),
         (2, 'Mac')
     ]
-    os_status = models.IntegerField(choices=os_status_list,verbose_name='操作系统')
+    os_status = models.IntegerField(choices=os_status_list, verbose_name='操作系统')
     system_status_list = [
         (0, '虚拟机'),
         (1, '物理机')
     ]
     system_status = models.IntegerField(choices=system_status_list, verbose_name='机器类型')
+
+    class Meta:
+        default_permissions = []
 
 
 class Server(models.Model):
@@ -51,10 +62,23 @@ class Server(models.Model):
     update_date = models.DateTimeField(auto_now=True, verbose_name='更新主机时间')
     server_auto = models.OneToOneField('ServerAuto')
     idcs = models.ForeignKey('Idc', null=True, on_delete=models.SET_NULL)
-    product_one = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_one', verbose_name='业务线')
-    product_two = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_two', verbose_name='二级业务线')
-    product_host = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_host', verbose_name='主机组')
+    product_one = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_one',
+                                    verbose_name='业务线')
+    product_two = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_two',
+                                    verbose_name='二级业务线')
+    product_host = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='product_host',
+                                     verbose_name='主机组')
     server_user = models.ForeignKey('ServerUser', null=True, on_delete=models.SET_NULL, verbose_name='管理用户')
+
+    class Meta:
+        default_permissions = []
+        permissions = (
+            ('view_server', '查看资产主机'),
+            ('add_server', '添加资产主机'),
+            ('delete_server', '删除资产主机'),
+            ('server_set_product', '设置资产主机业务线'),
+            ('server_scan_status', '资产主机刷新探测'),
+        )
 
 
 class Disk(models.Model):
@@ -62,11 +86,17 @@ class Disk(models.Model):
     size = models.CharField(max_length=32, verbose_name='硬盘大小')
     server = models.ForeignKey(Server)
 
+    class Meta:
+        default_permissions = []
+
 
 class Ip(models.Model):
     name = models.CharField(max_length=32, verbose_name='网卡名')
     ip_address = models.CharField(max_length=32, verbose_name='IP地址')
     server = models.ForeignKey(Server)
+
+    class Meta:
+        default_permissions = []
 
 
 class ServerUser(models.Model):
@@ -74,3 +104,12 @@ class ServerUser(models.Model):
     username = models.CharField(max_length=32, verbose_name='系统用户')
     password = models.CharField(max_length=64, verbose_name='系统密码')
     info = models.TextField(verbose_name='备注')
+
+    class Meta:
+        default_permissions = []
+        permissions = (
+            ('add_serveruser', '添加资产用户'),
+            ('delete_serveruser', '删除资产用户'),
+            ('view_serveruser', '查看资产用户'),
+            ('modify_serveruser', '修改资产用户'),
+        )

@@ -47,7 +47,9 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <a href="{% url 'group_create' %}" class="btn btn-sm btn-primary"> 创建用户组 </a>
+                        {% if perms.users.add_group %}
+                            <a href="{% url 'group_create' %}" class="btn btn-sm btn-primary"> 创建用户组 </a>
+                        {% endif %}
                         <table class="table table-striped table-bordered table-hover  dataTable no-footer">
                             <thead>
                             <tr>
@@ -55,7 +57,9 @@
                                 <th class="text-center">名称</th>
                                 <th class="text-center">用户</th>
                                 <th class="text-center">备注</th>
-                                <th class="text-center">操作</th>
+                                {% if perms.users.modify_group or perms.users.group_set_perm or perms.users.delete_group %}
+                                    <th class="text-center">操作</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
@@ -75,14 +79,23 @@
                                         </a>
                                     </td>
                                     <td class="text-center">{{ group_list.info }}</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-xs btn-info"
-                                           href="{% url 'group_modify' %}?gid={{ group_list.group.id }}">更新</a>
-                                        <a class="btn btn-xs btn-primary"
-                                           href="{% url 'group_set_perm' %}?gid={{ group_list.group.id }}">设置权限</a>
-                                        <a class="btn btn-xs btn-danger" id="group_delete"
-                                           onclick="group_delete({{ group_list.group.id }})">删除</a>
-                                    </td>
+                                    {% if perms.users.modify_group or perms.users.group_set_perm or perms.users.delete_group %}
+
+                                        <td class="text-center">
+                                            {% if perms.users.modify_group %}
+                                                <a class="btn btn-xs btn-info"
+                                                   href="{% url 'group_modify' %}?gid={{ group_list.group.id }}">更新</a>
+                                            {% endif %}
+                                            {% if perms.users.group_set_perm %}
+                                                <a class="btn btn-xs btn-primary"
+                                                   href="{% url 'group_set_perm' %}?gid={{ group_list.group.id }}">设置权限</a>
+                                            {% endif %}
+                                            {% if perms.users.delete_group %}
+                                                <a class="btn btn-xs btn-danger" id="group_delete"
+                                                   onclick="group_delete({{ group_list.group.id }})">删除</a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>

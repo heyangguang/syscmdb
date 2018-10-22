@@ -2,13 +2,14 @@
 __author__ = 'HeYang'
 from django.views.generic import TemplateView, ListView, View
 from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from resources.models import Idc
 from resources.forms import CreateIdcForm
 
 
 # 机房列表
-class IdcListView(ListView):
+class IdcListView(LoginRequiredMixin, ListView):
     template_name = 'idc/idc_list.html'
     model = Idc
     paginate_by = 8
@@ -41,7 +42,7 @@ class IdcListView(ListView):
 
 
 # 创建机房
-class IdcCreateView(TemplateView):
+class IdcCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'idc/idc_create.html'
 
     def post(self, request):
@@ -63,7 +64,7 @@ class IdcCreateView(TemplateView):
 
 
 # 删除机房
-class IdcDeleteView(View):
+class IdcDeleteView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -78,7 +79,7 @@ class IdcDeleteView(View):
 
 
 # 更新机房
-class IdcModifyView(TemplateView):
+class IdcModifyView(LoginRequiredMixin, TemplateView):
     template_name = 'idc/idc_modeify.html'
 
     def get_context_data(self, **kwargs):

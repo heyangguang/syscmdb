@@ -2,11 +2,12 @@
 <html>
 
 <head>
+    <link rel="icon" href="/static/img/logo.png" type="image/x-icon"/>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>sysCMDB系统</title>
+    <title>syscmdb系统</title>
 
 
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +31,6 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="/static/img/profile_small.jpg"/>
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong
@@ -48,7 +48,8 @@
                     <li class="{% ifequal request.path '/dashboard/' %}active{% endifequal %}">
                         <a href="{% url 'index' %}"><i class="fa fa-laptop"></i> <span class="nav-label">首页</span></a>
                     </li>
-                    <li class="{% if request.path == '/users/user/list/' %}
+                    {% if perms.users.view_user or perms.users.view_group or perms.auth.view_perm %}
+                        <li class="{% if request.path == '/users/user/list/' %}
                                     active
                                {% elif request.path == '/users/user/create/' %}
                                     active
@@ -73,40 +74,52 @@
                                {% elif '/users/group/set_perm/' in request.path %}
                                     active
                                {% endif %}">
-                        <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">系统用户</span><span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li class="
-                               {% if request.path == '/users/user/list/' %}
-                                    active
-                               {% elif request.path == '/users/user/create/' %}
-                                    active
-                               {% elif request.path == '/users/user/modify/' %}
-                                    active
-                               {% elif '/users/user/detail/' in request.path %}
-                                    active
-                               {% elif '/users/user/set_perm/' in request.path %}
-                                    active
-                               {% endif %}"><a href="{% url 'user_list' %}">用户管理</a></li>
-                            <li class="
-                               {% if '/users/group/list/' in request.path %}
-                                    active
-                               {% elif '/users/group/create/' in request.path %}
-                                    active
-                               {% elif '/users/group/modify/' in request.path %}
-                                    active
-                               {% elif '/users/group/set_perm/' in request.path %}
-                                    active
-                               {% endif %}"><a href="{% url 'group_list' %}">用户组管理</a></li>
-                            <li class="
-                               {% if '/users/perm/list/' in request.path %}
-                                    active
-                               {% elif '/users/perm/create/' in request.path %}
-                                    active
-                               {% endif %}"><a href="{% url 'perm_list' %}">系统权限管理</a></li>
-                        </ul>
-                    </li>
-                    <li class="{% if request.path in '/resources/idc/list/' %}
+                            <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">系统用户</span><span
+                                    class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                {% if perms.users.view_user %}
+                                    <li class="
+                                   {% if request.path == '/users/user/list/' %}
+                                        active
+                                   {% elif request.path == '/users/user/create/' %}
+                                        active
+                                   {% elif request.path == '/users/user/modify/' %}
+                                        active
+                                   {% elif '/users/user/detail/' in request.path %}
+                                        active
+                                   {% elif '/users/user/set_perm/' in request.path %}
+                                        active
+                                   {% endif %}"><a href="{% url 'user_list' %}">用户管理</a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.users.view_group %}
+                                    <li class="
+                                   {% if '/users/group/list/' in request.path %}
+                                        active
+                                   {% elif '/users/group/create/' in request.path %}
+                                        active
+                                   {% elif '/users/group/modify/' in request.path %}
+                                        active
+                                   {% elif '/users/group/set_perm/' in request.path %}
+                                        active
+                                   {% endif %}"><a href="{% url 'group_list' %}">用户组管理</a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.auth.view_perm %}
+                                    <li class="
+                                   {% if '/users/perm/list/' in request.path %}
+                                        active
+                                   {% elif '/users/perm/create/' in request.path %}
+                                        active
+                                   {% endif %}"><a href="{% url 'perm_list' %}">系统权限管理</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if perms.products.view_product or perms.resources.view_server or perms.resources.view_idc or perms.resources.view_serveruser %}
+                        <li class="{% if request.path in '/resources/idc/list/' %}
                                     active
                                {% elif request.path == '/products/product/list/' %}
                                     active
@@ -121,35 +134,49 @@
                                {% elif '/resources/serveruser/detail/' in request.path %}
                                     active
                                {% endif %}">
-                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">资产管理</span><span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li class="
-                               {% if request.path in '/resources/servers/list/' %}
-                                    active
-                               {% elif '/resources/servers/detail/' in request.path %}
-                                    active
-                               {% elif request.path in '/resources/servers/set_product/' %}
-                                    active
-                               {% endif %}"><a href="{% url 'server_list' %}">资产主机</a></li>
-                            <li class="
-                               {% if request.path in '/products/product/list/' %}
-                                    active
-                               {% endif %}"><a href="{% url 'product_list' %}">资产项目</a></li>
-                            <li class="
-                               {% if request.path in '/resources/idc/list/' %}
-                                    active
-                               {% elif request.path in '/resources/idc/modify/' %}
-                                    active
-                               {% endif %}"><a href="{% url 'idc_list' %}">资产机房</a></li>
-                            <li class="
-                               {% if request.path in '/resources/serveruser/list/' %}
-                                    active
-                               {% elif '/resources/serveruser/detail/' in request.path %}
-                                    active
-                               {% endif %}"><a href="{% url 'serveruser_list' %}">资产用户</a></li>
-                        </ul>
-                    </li>
+                            <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">资产管理</span><span
+                                    class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                {% if perms.resources.view_server %}
+                                    <li class="
+                                       {% if request.path in '/resources/servers/list/' %}
+                                            active
+                                       {% elif '/resources/servers/detail/' in request.path %}
+                                            active
+                                       {% elif request.path in '/resources/servers/set_product/' %}
+                                            active
+                                       {% endif %}"><a href="{% url 'server_list' %}">资产主机</a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.products.view_product %}
+                                    <li class="
+                                       {% if request.path in '/products/product/list/' %}
+                                            active
+                                       {% endif %}"><a href="{% url 'product_list' %}">资产项目</a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.resources.view_idc %}
+                                    <li class="
+                                       {% if request.path in '/resources/idc/list/' %}
+                                            active
+                                       {% elif request.path in '/resources/idc/modify/' %}
+                                            active
+                                       {% endif %}"><a href="{% url 'idc_list' %}">资产机房</a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.resources.view_serveruser %}
+                                    <li class="
+                                       {% if request.path in '/resources/serveruser/list/' %}
+                                            active
+                                       {% elif '/resources/serveruser/detail/' in request.path %}
+                                            active
+                                       {% endif %}"><a href="{% url 'serveruser_list' %}">资产用户</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endif %}
+
                 </ul>
 
             </div>
@@ -163,12 +190,6 @@
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i>
                     </a>
-                    <form role="search" class="navbar-form-custom" action="search_results.html">
-                        <div class="form-group">
-                            <input type="text" placeholder="查询服务器名" class="form-control" name="top-search"
-                                   id="top-search">
-                        </div>
-                    </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
 
@@ -188,7 +209,7 @@
                     <h2></h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="{% url 'index' %}">仪表盘</a>
+                            <a href="{% url 'index' %}">首页</a>
                         </li>
                     </ol>
                 </div>

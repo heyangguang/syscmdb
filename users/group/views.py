@@ -6,10 +6,11 @@ from django.contrib.auth.models import User, Group, Permission
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # 用户组列表
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     template_name = 'group/group_list.html'
     model = GroupProfile
     paginate_by = 8
@@ -42,7 +43,7 @@ class GroupListView(ListView):
 
 
 # 创建用户组
-class GroupCreateView(TemplateView):
+class GroupCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'group/group_create.html'
 
     def get_context_data(self, **kwargs):
@@ -70,7 +71,7 @@ class GroupCreateView(TemplateView):
 
 
 # 删除用户组
-class GroupDeleteView(View):
+class GroupDeleteView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -90,7 +91,7 @@ class GroupDeleteView(View):
 
 
 # 更新用户组
-class GroupModifyView(TemplateView):
+class GroupModifyView(LoginRequiredMixin, TemplateView):
     template_name = 'group/group_modify.html'
 
     def get_context_data(self, **kwargs):
@@ -125,14 +126,14 @@ class GroupModifyView(TemplateView):
 
 
 # 用户组设置权限
-class GroupSetPermView(TemplateView):
+class GroupSetPermView(LoginRequiredMixin, TemplateView):
     template_name = 'group/group_set_perm.html'
 
     def get_context_data(self, **kwargs):
         gid = self.request.GET.get('gid')
         context = super(GroupSetPermView, self).get_context_data(**kwargs)
         context['group_obj'] = Group.objects.get(pk=gid)
-        context['perm_list'] = Permission.objects.all()
+        context['perm_list'] = Permission.objects.all().exclude(name__regex='[a-zA-Z0-9]')
 
         return context
 

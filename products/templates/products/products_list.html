@@ -76,12 +76,16 @@
             <div class="col-xs-3">
                 <div class="ibox-title">业务线展示</div>
                 <div class="mail-box-header">
-                    <a href="{% url 'product_create' %}">
-                        <button type="button" class="btn btn-primary" style="margin-left: 8px">创建业务线</button>
-                    </a>
-                    <a href="{% url 'product_create_host' %}">
-                        <button type="button" class="btn btn-primary" style="margin-left: 30px">创建机器组</button>
-                    </a>
+                    {% if perms.products.add_product %}
+                        <a href="{% url 'product_create' %}">
+                            <button type="button" class="btn btn-primary" style="margin-left: 8px">创建业务线</button>
+                        </a>
+                    {% endif %}
+                    {% if perms.products.add_product_host %}
+                        <a href="{% url 'product_create_host' %}">
+                            <button type="button" class="btn btn-primary" style="margin-left: 30px">创建机器组</button>
+                        </a>
+                    {% endif %}
                     <div id="container"></div>
                 </div>
 
@@ -166,8 +170,10 @@
 
                             <div class="feed-element">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-block btn-outline btn-primary" id="info_modify_btn">修改
-                                    </button>
+                                    {% if perms.products.modify_product %}
+                                        <button class="btn btn-block btn-outline btn-primary" id="info_modify_btn">修改
+                                        </button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </ul>
@@ -409,7 +415,7 @@
                         } else {
                             scan = '<dd><span class="label label-danger">连接异常</span></dd>'
                         }
-                        var hostname = '<a href=/resources/servers/detail/'+ obj.id +'>' + obj.hostname + '</a>';
+                        var hostname = '<a href=/resources/servers/detail/' + obj.id + '>' + obj.hostname + '</a>';
                         host_body.append("<tr><td class=\"text-center\">" + hostname + "</td><td class=\"text-center\">" + obj.server_auto__ip_inner + "</td><td class=\"text-center\">" + scan + "</td><td class=\"text-center\">" + obj.idcs__name_cn + "</td></tr>");
                     });
                     hostservershow_div.show();

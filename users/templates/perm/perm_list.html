@@ -47,14 +47,18 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <a href="{% url 'perm_create' %}" class="btn btn-sm btn-primary"> 创建权限 </a>
+                        {% if perms.auth.add_perm %}
+                            <a href="{% url 'perm_create' %}" class="btn btn-sm btn-primary"> 创建权限 </a>
+                        {% endif %}
                         <table class="table table-striped table-bordered table-hover  dataTable no-footer">
                             <thead>
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">权限名</th>
                                 <th class="text-center">权限介绍</th>
-                                <th class="text-center">操作</th>
+                                {% if perms.auth.delete_perm %}
+                                    <th class="text-center">操作</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
@@ -62,13 +66,15 @@
                                 <tr>
                                     <td class="text-center">{{ forloop.counter }}</td>
                                     <td class="text-center"><a
-                                            href="">{{ perm_obj.name }}</a>
+                                            href="">{{ perm_obj.codename }}</a>
                                     </td>
-                                    <td class="text-center">{{ perm_obj.codename }}</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-xs btn-danger" id="perm_obj_delete"
-                                           onclick="perm_delete({{ perm_obj.id }})">删除</a>
-                                    </td>
+                                    <td class="text-center">{{ perm_obj.name }}</td>
+                                    {% if perms.auth.delete_perm %}
+                                        <td class="text-center">
+                                            <a class="btn btn-xs btn-danger" id="perm_obj_delete"
+                                               onclick="perm_delete({{ perm_obj.id }})">删除</a>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>

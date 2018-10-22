@@ -3,6 +3,7 @@ __author__ = 'HeYang'
 from django.views.generic import ListView, View, DetailView, TemplateView
 from django.http import JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from resources.models import Server, ServerAuto, Disk, Ip, Idc, ServerUser
 from resources.forms import CreateServerAutoForm, CreateServerForm
@@ -14,7 +15,7 @@ import json
 
 
 # 服务器展示
-class ServerListView(ListView):
+class ServerListView(LoginRequiredMixin, ListView):
     template_name = 'servers/server_list.html'
     model = Server
 
@@ -27,7 +28,7 @@ class ServerListView(ListView):
 
 
 # 自动推送服务器脚本
-class ServerCreateView(View):
+class ServerCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -128,7 +129,7 @@ class ServerDataApiView(View):
 
 
 # 服务器详情展示
-class ServerDetailView(DetailView):
+class ServerDetailView(LoginRequiredMixin, DetailView):
     template_name = 'servers/server_detail.html'
     model = Server
 
@@ -139,7 +140,7 @@ class ServerDetailView(DetailView):
 
 
 # 修改服务器的IDC机房归属
-class ServerModifyIdcView(View):
+class ServerModifyIdcView(LoginRequiredMixin, View):
 
     def post(self, request):
         print(request.POST)
@@ -168,7 +169,7 @@ class ServerModifyIdcView(View):
 
 
 # 删除服务器
-class ServerDeleteView(View):
+class ServerDeleteView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -190,7 +191,7 @@ class ServerDeleteView(View):
 
 
 # 刷新探测服务器
-class ServerFlushView(View):
+class ServerFlushView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -241,7 +242,7 @@ class ServerFlushView(View):
 
 
 # 业务线获取主机信息
-class ServerGetListView(View):
+class ServerGetListView(LoginRequiredMixin, View):
 
     def get(self, request):
         ret = {'status': 0}
@@ -258,7 +259,7 @@ class ServerGetListView(View):
 
 
 # 设置业务线
-class ServerSetProduct(TemplateView):
+class ServerSetProduct(LoginRequiredMixin, TemplateView):
     template_name = 'servers/server_set_product.html'
 
     def get_context_data(self, **kwargs):

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -140,6 +140,9 @@ EMAIL_HOST = 'smtp.qq.com'
 EMAIL_TITLE = '[syscmdb]'
 HOST_URL = 'http://10.10.10.100:8000'
 
+# SESSION配置
+SESSION_COOKIE_AGE = 1000
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

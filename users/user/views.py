@@ -117,7 +117,7 @@ class UserCreateView(LoginRequiredMixin, TemplateView):
 
 
 # 设置密码
-class UserConfigPasswordView(TemplateView):
+class UserConfigPasswordView(LoginRequiredMixin, TemplateView):
     template_name = 'user/user_config_passwd.html'
 
     def get_context_data(self, **kwargs):
@@ -167,7 +167,7 @@ class UserConfigPasswordView(TemplateView):
 
 
 # 删除用户
-class UserDeleteView(View):
+class UserDeleteView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -187,7 +187,7 @@ class UserDeleteView(View):
 
 
 # 禁用用户
-class UserStopView(View):
+class UserStopView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -209,8 +209,8 @@ class UserStopView(View):
         return JsonResponse(ret)
 
 
-# 启动用户
-class UserStartView(View):
+# 启用用户
+class UserStartView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
@@ -233,7 +233,7 @@ class UserStartView(View):
 
 
 # 修改用户
-class UserModifyView(View):
+class UserModifyView(LoginRequiredMixin, View):
 
     def get(self, request):
         uid = request.GET.get('uid', None)
@@ -280,7 +280,7 @@ class UserModifyView(View):
 
 
 # 查看用户
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
     template_name = 'user/user_detail.html'
     model = User
 
@@ -292,7 +292,7 @@ class UserDetailView(DetailView):
 
 
 # 修改用户的用户组
-class UserModifyGroupView(View):
+class UserModifyGroupView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {"status": 0, 'msg': '修改成功'}
@@ -322,7 +322,7 @@ class UserModifyGroupView(View):
 
 
 # 管理员设置密码
-class UserSetPasswordView(View):
+class UserSetPasswordView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {"status":0}
@@ -355,13 +355,13 @@ class UserSetPasswordView(View):
 
 
 # 设置用户权限
-class UserSetPermView(TemplateView):
+class UserSetPermView(LoginRequiredMixin, TemplateView):
     template_name = 'user/user_set_perm.html'
 
     def get_context_data(self, **kwargs):
         uid = self.request.GET.get('uid')
         context = super(UserSetPermView, self).get_context_data(**kwargs)
-        context['perm_list'] = Permission.objects.all()
+        context['perm_list'] = Permission.objects.all().exclude(name__regex='[a-zA-Z0-9]')
         context['user_obj'] = User.objects.get(pk=uid)
 
         return context
@@ -382,7 +382,8 @@ class UserSetPermView(TemplateView):
         return JsonResponse(ret)
 
 
-class UserGetListView(View):
+# 获取用户信息
+class UserGetListView(LoginRequiredMixin, View):
 
     def get(self, request):
         users = User.objects.values('id', 'email', 'username')

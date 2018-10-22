@@ -54,10 +54,12 @@
                     </div>
                     <div class="ibox-content">
                         <div class="form-group">
-                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#myModal">
-                                添加服务器
-                            </button>
+                            {% if perms.resources.add_server %}
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                        data-target="#myModal">
+                                    添加服务器
+                                </button>
+                            {% endif %}
                         </div>
                         <table class="table table-striped table-bordered table-hover  dataTable no-footer">
                             <thead>
@@ -70,7 +72,9 @@
                                 <th class="text-center">机房</th>
                                 <th class="text-center">业务线</th>
                                 <th class="text-center">产品线</th>
-                                <th class="text-center">操作</th>
+                                {% if perms.resources.server_scan_status or perms.resources.server_set_product or prems.resources.delete_server %}
+                                    <th class="text-center">操作</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
@@ -89,21 +93,30 @@
                                         <dd><span class="label label-danger">连接异常</span></dd>
                                     {% endif %}</td>
                                     <td class="text-center">
-                                        {% if server_obj.idcs.id %}{{ server_obj.idcs.name_cn }}{% else %}-{% endif %}</td>
+                                        {% if server_obj.idcs.id %}{{ server_obj.idcs.name_cn }}{% else %}
+                                            -{% endif %}</td>
                                     <td class="text-center">
                                         {% if server_obj.product_one %}{{ server_obj.product_one.name_cn }}{% else %}
                                             -{% endif %}</td>
                                     <td class="text-center">
                                         {% if server_obj.product_two %}{{ server_obj.product_two.name_cn }}{% else %}
                                             -{% endif %}</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-xs btn-info"
-                                           onclick="server_flush({{ server_obj.id }})">刷新探测</a>
-                                        <a class="btn btn-xs btn-primary"
-                                           href="{% url 'server_set_product' %}?id={{ server_obj.id }}">设置业务线</a>
-                                        <a class="btn btn-xs btn-danger"
-                                           onclick="server_delete({{ server_obj.id }})">删除</a>
-                                    </td>
+                                    {% if perms.resources.server_scan_status or perms.resources.server_set_product or prems.resources.delete_server %}
+                                        <td class="text-center">
+                                            {% if perms.resources.server_scan_status %}
+                                                <a class="btn btn-xs btn-info"
+                                                   onclick="server_flush({{ server_obj.id }})">刷新探测</a>
+                                            {% endif %}
+                                            {% if perms.resources.server_set_product %}
+                                                <a class="btn btn-xs btn-primary"
+                                                   href="{% url 'server_set_product' %}?id={{ server_obj.id }}">设置业务线</a>
+                                            {% endif %}
+                                            {% if prems.resources.delete_server %}
+                                                <a class="btn btn-xs btn-danger"
+                                                   onclick="server_delete({{ server_obj.id }})">删除</a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>

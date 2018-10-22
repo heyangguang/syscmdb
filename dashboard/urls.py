@@ -5,5 +5,5 @@ from django.conf.urls import url
 from dashboard import views
 
 urlpatterns = [
-    url(r'^$', views.TestIndexView.as_view(), name='index'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
 ]

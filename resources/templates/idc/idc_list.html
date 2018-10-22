@@ -47,7 +47,9 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <a href="{% url 'idc_create' %}" class="btn btn-sm btn-primary"> 添加IDC机房 </a>
+                        {% if perms.resources.add_idc %}
+                            <a href="{% url 'idc_create' %}" class="btn btn-sm btn-primary"> 添加IDC机房 </a>
+                        {% endif %}
                         <table class="table table-striped table-bordered table-hover  dataTable no-footer">
                             <thead>
                             <tr>
@@ -56,7 +58,9 @@
                                 <th class="text-center">机房地址</th>
                                 <th class="text-center">机房负责人</th>
                                 <th class="text-center">机房负责人联系电话</th>
-                                <th class="text-center">操作</th>
+                                {% if perms.resources.modify_idc or perms.resources.delete_idc %}
+                                    <th class="text-center">操作</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody>
@@ -69,12 +73,18 @@
                                     <td class="text-center">{{ idc_obj.address }}</td>
                                     <td class="text-center">{{ idc_obj.username }}</td>
                                     <td class="text-center">{{ idc_obj.username_phone }}</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-xs btn-info"
-                                           href="{% url 'idc_modify' %}?idc_id={{ idc_obj.id }}">更新</a>
-                                        <a class="btn btn-xs btn-danger" id="idc_delete"
-                                           onclick="idc_delete({{ idc_obj.id }})">删除</a>
-                                    </td>
+                                    {% if perms.resources.modify_idc or perms.resources.delete_idc %}
+                                        <td class="text-center">
+                                            {% if perms.resources.modify_idc %}
+                                                <a class="btn btn-xs btn-info"
+                                                   href="{% url 'idc_modify' %}?idc_id={{ idc_obj.id }}">更新</a>
+                                            {% endif %}
+                                            {% if perms.resources.delete_idc %}
+                                                <a class="btn btn-xs btn-danger" id="idc_delete"
+                                                   onclick="idc_delete({{ idc_obj.id }})">删除</a>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>

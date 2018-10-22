@@ -3,13 +3,14 @@ __author__ = 'HeYang'
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView, ListView, View
 from django.contrib.auth.models import Permission, ContentType
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 
 from users.forms import CreatePermForm
 
 
 # 权限列表
-class PermListView(ListView):
+class PermListView(LoginRequiredMixin, ListView):
     template_name = 'perm/perm_list.html'
     model = Permission
     ordering = 'id'
@@ -19,6 +20,11 @@ class PermListView(ListView):
         context = super(PermListView, self).get_context_data(**kwargs)
         context['page_range'] = self.get_pagerange(context['page_obj'])
         return context
+
+    def get_queryset(self):
+        queryset = super(PermListView, self).get_queryset()
+        queryset = queryset.exclude(name__regex='[a-zA-Z0-9]')
+        return queryset
 
     def get_pagerange(self, page_obj):
         current_index = page_obj.number
@@ -40,7 +46,7 @@ class PermListView(ListView):
 
 
 # 创建权限
-class PermCreateView(TemplateView):
+class PermCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'perm/perm_create.html'
 
     def get_context_data(self, **kwargs):
@@ -70,7 +76,7 @@ class PermCreateView(TemplateView):
 
 
 # 删除权限
-class PermDeleteView(View):
+class PermDeleteView(LoginRequiredMixin, View):
 
     def post(self, request):
         ret = {'status': 0}
