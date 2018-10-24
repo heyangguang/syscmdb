@@ -134,7 +134,7 @@ USE_TZ = False
 LOGIN_URL = '/users/login/'
 
 EMAIL_USER  = '1052973860@qq.com'
-EMAIL_PASSWORD = 'rlmtojyjuxkzbfcc'
+EMAIL_PASSWORD = ''
 EMAIL_PORT = 25
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_TITLE = '[syscmdb]'
