@@ -51,6 +51,6 @@ syscmdb采用Python / Django开发交互界面美观、用户体验好。
     * 关联资产设备
     * 删除资用户
     * 更新资产用户
-  
-#### 图片展示
+### 系统展示
+#### 登录页
  ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg)
