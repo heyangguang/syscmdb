@@ -8,6 +8,7 @@ syscmdb采用Python / Django开发交互界面美观、用户体验好。
 DEMO
 ---
 项目展示地址：http://101.132.177.120
+账号 root 密码 admin@123
 
 功能
 ---
