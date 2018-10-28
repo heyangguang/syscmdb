@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#k)sbqd+f!^3xg05-mc*+a0yh!a$gt^+&d*1*kc(6c)1-rsba3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -134,7 +134,7 @@ USE_TZ = False
 LOGIN_URL = '/users/login/'
 
 EMAIL_USER  = '1052973860@qq.com'
-EMAIL_PASSWORD = ''
+EMAIL_PASSWORD = 'rlmtojyjuxkzbfcc'
 EMAIL_PORT = 25
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_TITLE = '[syscmdb]'

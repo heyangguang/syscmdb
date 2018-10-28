@@ -14,10 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
 from django.views.generic import RedirectView
+from syscmdb.views import *
 
-from dashboard import views
+handler404 = page_not_found
+handler500 = page_error
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/dashboard/')),
