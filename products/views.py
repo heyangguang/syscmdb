@@ -146,6 +146,7 @@ class ProductTree(object):
         for product in self.data.filter(pid=0):
             node = self.get_node(product)
             node['children'] = self.get_children(product.id)
+            node['icon'] = 'fa fa-folder-open'
             ret.append(node)
         return ret
 
@@ -154,6 +155,7 @@ class ProductTree(object):
         for product in self.data.filter(pid=product_id):
             node = self.get_node(product)
             node['children'] = self.get_not_children(product.id)
+            node['icon'] = 'fa fa-cubes'
             ret.append(node)
         return ret
 
@@ -161,6 +163,7 @@ class ProductTree(object):
         ret = []
         for product in self.data.filter(pid=product_id):
             node = self.get_node(product)
+            node['icon'] = "fa fa-laptop"
             ret.append(node)
         return ret
 
