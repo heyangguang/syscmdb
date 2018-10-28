@@ -5,6 +5,11 @@ Python3.6.2 Django1.11.1 paramiko2.4.2
 syscmdb系统是一款遵循WEB2.0开源的CMDB系统，仅用于测试和教学使用。如有帮助到各位，请务必尊重作者本人谢谢。
 syscmdb采用Python / Django开发交互界面美观、用户体验好。
 
+DEMO
+---
+项目展示地址：http://101.132.177.120
+账号 root 密码 admin@123
+
 功能
 ---
 ### 首页
@@ -51,3 +56,22 @@ syscmdb采用Python / Django开发交互界面美观、用户体验好。
     * 关联资产设备
     * 删除资用户
     * 更新资产用户
+### 系统展示
+#### 登录页
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg)
+#### 系统权限管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E7%B3%BB%E7%BB%9F%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.jpg)
+#### 系统用户管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.jpg)
+#### 系统用户组管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E7%BB%84%E7%AE%A1%E7%90%86.jpg)
+#### 资产主机管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E8%B5%84%E4%BA%A7%E4%B8%BB%E6%9C%BA%E7%AE%A1%E7%90%86.jpg)
+#### 资产机房管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E8%B5%84%E4%BA%A7%E6%9C%BA%E6%88%BF%E7%AE%A1%E7%90%86.jpg)
+#### 资产用户管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E8%B5%84%E4%BA%A7%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.jpg)
+#### 资产项目管理
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E8%B5%84%E4%BA%A7%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.jpg)
+#### 首页
+ ![image](https://github.com/heyangguang/syscmdb/blob/master/img-folder/%E9%A6%96%E9%A1%B5.jpg)
